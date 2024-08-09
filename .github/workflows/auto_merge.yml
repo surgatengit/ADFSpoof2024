@@ -3,7 +3,11 @@ name: Auto Update and Merge
 on:
   push:
     branches:
-      - master  # Trigger on pushes to the master branch        
+      - master  # Trigger on pushes to the master branch
+
+  pull_request:  # Trigger on pull requests
+    branches:
+      - master  # Replace 'target-branch' with your actual branch name      
 
 jobs:
   auto-update-and-merge:
