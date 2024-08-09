@@ -27,7 +27,7 @@ jobs:
       - name: Auto-merge pull requests
         uses: ridedott/merge-me-action@v2.10.93
         with:
-          github-token: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           MERGE_METHOD: MERGE  # Use 'MERGE' for a merge commit
           PRESET: NONE 
           # Other options can be added here if needed, but be cautious
