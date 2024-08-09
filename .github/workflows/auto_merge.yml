@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4.1.7
         with:
           fetch-depth: 0  # Fetch all history for merging
 
@@ -25,9 +25,9 @@ jobs:
         run: git push
 
       - name: Auto-merge pull requests
-        uses: ridedott/merge-me-action@v2
+        uses: ridedott/merge-me-action@v2.10.93
         with:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          github-token: ${{ secrets.GH_TOKEN }}
           MERGE_METHOD: MERGE  # Use 'MERGE' for a merge commit
           PRESET: NONE 
           # Other options can be added here if needed, but be cautious
