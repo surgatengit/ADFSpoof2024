@@ -22,5 +22,4 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           MERGE_METHOD: MERGE
-          PRESET: NONE
           # Add conditions or checks here to control which PRs are auto-merged       
