@@ -27,10 +27,3 @@ jobs:
 
       - name: Push changes
         run: git push origin master
-
-      - name: Auto-merge pull requests (with caution!)
-        uses: ridedott/merge-me-action@v2.10.93
-        with:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-          MERGE_METHOD: MERGE
-          # Add conditions or checks here to control which PRs are auto-merged       
