@@ -6,7 +6,6 @@ on:
     branches:
       - master  # Replace 'target-branch' with your actual branch name      
 
-
 jobs:
   auto-update-and-merge:
     runs-on: ubuntu-latest
@@ -25,15 +24,13 @@ jobs:
 
       - name: Handle potential non-fast-forward error
         run: |
-          # Fetch latest changes from the remote
-          git fetch origin master
+          # Pull latest changes from the remote with rebase
+          git pull --rebase origin master
 
-          # Attempt to merge, handling conflicts if they occur
-          if ! git merge origin/master; then
-            echo "Conflicts detected. Resolving..."
-            # You might want to add more specific conflict resolution logic here
-            git add . # Stage all changes (careful!)
-            git commit -m "Resolve merge conflicts"
+          # Handle conflicts if they occur (consider adding more specific logic)
+          if [ $? -ne 0 ]; then
+            echo "Conflicts detected during rebase. Please resolve manually and continue the rebase."
+            exit 1 # Fail the workflow if conflicts cannot be resolved automatically
           fi
 
       - name: Push changes
