@@ -1,0 +1,26 @@
+name: Auto Update and Merge
+
+on:
+  pull_request_target:
+    types: [assigned, unassigned, labeled, unlabeled, opened, edited, reopened, synchronize, ready_for_review, locked, unlocked, review_requested, review_request_removed, auto_merge_enabled, auto_merge_disabled]
+    branches:
+      - master  # Replace 'target-branch' with your actual branch name      
+
+
+jobs:
+  auto-update-and-merge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.7
+        with:
+          fetch-depth: 0
+
+
+      - name: Auto-merge pull requests (with caution!)
+        uses: ridedott/merge-me-action@v2.10.93
+        with:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          MERGE_METHOD: MERGE
+          PRESET: NONE
+          # Add conditions or checks here to control which PRs are auto-merged       
