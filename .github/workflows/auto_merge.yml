@@ -1,11 +1,8 @@
 name: Auto Update and Merge
 
 on:
-  push:
-    branches:
-      - master  # Trigger on pushes to the master branch
-
-  pull_request:  # Trigger on pull requests
+  pull_request_target:
+    types: [assigned, unassigned, labeled, unlabeled, opened, edited, reopened, synchronize, ready_for_review, locked, unlocked, review_requested, review_request_removed, auto_merge_enabled, auto_merge_disabled]
     branches:
       - master  # Replace 'target-branch' with your actual branch name      
 
