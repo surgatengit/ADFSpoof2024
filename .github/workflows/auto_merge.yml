@@ -6,6 +6,7 @@ on:
     branches:
       - master  # Replace 'target-branch' with your actual branch name      
 
+
 jobs:
   auto-update-and-merge:
     runs-on: ubuntu-latest
@@ -13,22 +14,35 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4.1.7
         with:
-          fetch-depth: 0  # Fetch all history for merging
+          fetch-depth: 0
 
-      - name: Merge main into target branch
+      - name: Merge main into master
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git checkout master # Replace 'target-branch' with your actual branch name
-          git merge master --no-ff  # Merge with a merge commit
+          git checkout master
+          git merge main --no-ff
+
+      - name: Handle potential non-fast-forward error
+        run: |
+          # Fetch latest changes from the remote
+          git fetch origin master
+
+          # Attempt to merge, handling conflicts if they occur
+          if ! git merge origin/master; then
+            echo "Conflicts detected. Resolving..."
+            # You might want to add more specific conflict resolution logic here
+            git add . # Stage all changes (careful!)
+            git commit -m "Resolve merge conflicts"
+          fi
 
       - name: Push changes
         run: git push
 
-      - name: Auto-merge pull requests
+      - name: Auto-merge pull requests (with caution!)
         uses: ridedott/merge-me-action@v2.10.93
         with:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-          MERGE_METHOD: MERGE  # Use 'MERGE' for a merge commit
-          PRESET: NONE 
-          # Other options can be added here if needed, but be cautious
+          MERGE_METHOD: MERGE
+          PRESET: NONE
+          # Add conditions or checks here to control which PRs are auto-merged
