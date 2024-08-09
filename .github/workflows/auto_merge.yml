@@ -23,6 +23,9 @@ jobs:
           git checkout master
           git merge main --no-ff
 
+      - name: Pull latest changes
+        run: git pull origin master          
+
       - name: Handle potential non-fast-forward error (with retries)
         run: |
           for i in {1..3}; do # Retry up to 3 times
@@ -45,8 +48,6 @@ jobs:
             exit 1
           fi
 
-      - name: Push changes
-        run: git push
 
       - name: Auto-merge pull requests (with caution!)
         uses: ridedott/merge-me-action@v2.10.93
@@ -55,3 +56,7 @@ jobs:
           MERGE_METHOD: MERGE
           PRESET: NONE
           # Add conditions or checks here to control which PRs are auto-merged
+
+
+      - name: Push changes
+        run: git push          
