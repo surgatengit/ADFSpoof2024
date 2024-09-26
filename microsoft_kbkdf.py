@@ -5,10 +5,8 @@
 from __future__ import absolute_import, division, print_function
 
 from enum import Enum
-
 from six.moves import range
 
-from cryptography import utils
 from cryptography.exceptions import (
     AlreadyFinalized, InvalidKey, UnsupportedAlgorithm, _Reasons
 )
@@ -25,8 +23,7 @@ class CounterLocation(Enum):
     AfterFixed = "after_fixed"
 
 
-@utils.register_interface(KeyDerivationFunction)
-class KBKDFHMAC(object):
+class KBKDFHMAC(KeyDerivationFunction):
     def __init__(self, algorithm, mode, length, rlen, llen,
                  location, label, context, fixed, backend):
         if not isinstance(algorithm, hashes.HashAlgorithm):
@@ -66,8 +63,6 @@ class KBKDFHMAC(object):
         if context is None:
             context = b''
 
-        utils._check_bytes("label", label)
-        utils._check_bytes("context", context)
         self._algorithm = algorithm
         self._mode = mode
         self._length = length
@@ -84,7 +79,7 @@ class KBKDFHMAC(object):
         if not isinstance(value, int):
             raise TypeError('value must be of type int')
 
-        value_bin = utils.int_to_bytes(1, value)
+        value_bin = int.to_bytes(value, 1, byteorder='big')
         if not 1 <= len(value_bin) <= 4:
             return False
         return True
@@ -93,7 +88,6 @@ class KBKDFHMAC(object):
         if self._used:
             raise AlreadyFinalized
 
-        utils._check_byteslike("key_material", key_material)
         self._used = True
 
         # inverse floor division (equivalent to ceiling)
@@ -105,14 +99,14 @@ class KBKDFHMAC(object):
         # larger than 2^r-1, where r <= 32 is the binary length of the counter
         # This ensures that the counter values used as an input to the
         # PRF will not repeat during a particular call to the KDF function.
-        r_bin = utils.int_to_bytes(1, self._rlen)
+        r_bin = int.to_bytes(self._rlen, 1, byteorder='big')
         if rounds > pow(2, len(r_bin) * 8) - 1:
             raise ValueError('There are too many iterations.')
 
         for i in range(1, rounds + 1):
             h = hmac.HMAC(key_material, self._algorithm, backend=self._backend)
 
-            counter = utils.int_to_bytes(i, self._rlen)
+            counter = int.to_bytes(i, self._rlen, byteorder='big')
             if self._location == CounterLocation.BeforeFixed:
                 h.update(counter)
 
@@ -129,7 +123,7 @@ class KBKDFHMAC(object):
         if self._fixed_data and isinstance(self._fixed_data, bytes):
             return self._fixed_data
 
-        l_val = utils.int_to_bytes(self._length, self._llen)
+        l_val = int.to_bytes(self._length, self._llen, byteorder='big')
 
         return b"".join([self._label, b"\x00", self._context, l_val])
 
