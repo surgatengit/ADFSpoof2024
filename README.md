@@ -3,6 +3,7 @@
 A python tool to forge AD FS security tokens.
 
 Created by Doug Bienstock [(@doughsec)](https://twitter.com/doughsec) while at Mandiant FireEye.
+and forked the updated and bumped version from 4k4xs4pH1r3.
 
 ## Detailed Description
 
@@ -18,9 +19,8 @@ If you are confused by the above, you might want to read up on AD FS first. For 
 
 ADFSpoof is written in Python 3.
 
-~~ADFSpoof requires the installation of a custom fork of the Python Cryptography package, available [here](https://github.com/dmb2168/cryptography). Microsoft did not exactly follow the RFC for Key Deriviation :wink:, so a fork of the package was needed.~~ The modified key derivation function has been ported to work with the newer versions of cryptography lib.
-
 All requirements are captured in the repo's requirements.txt.
+Virtualenv is recommended
 
 `pip install -r requirements.txt`
 
